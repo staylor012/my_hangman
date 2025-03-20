@@ -1,5 +1,8 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.SimpleTimeZone;
+
 public class HangMan {
 
     public static void main(String[] args) {
@@ -26,11 +29,14 @@ public class HangMan {
                 index = sc.nextInt();
                 Categories domain = subjects[index];
                 String key = domain.getRandomItem();
-                System.out.println(key);
+                //System.out.println(key);
+                gamePlay(key);
+
             } else if (difficulty == 10) {
                 Categories domain = subjects[rdm.nextInt(5)];
                 String key = domain.getRandomItem();
-                System.out.println(key);
+                //System.out.println(key);
+                gamePlay(key);
 
             }
             System.out.println("Would you like to play again? Enter Y for yes and N for no");
@@ -39,4 +45,103 @@ public class HangMan {
             }
         }while (loop == 0);
     }
-}
+
+    public static ArrayList<Character> getInitialWordState(String word) {
+
+        ArrayList<Character> wordState = new ArrayList<>();
+        for (int i = 0; i < word.length(); i++) {
+
+            //Leave a space in the wordSate array
+            if (Character.isSpaceChar(word.charAt(i))) {
+                wordState.add(word.charAt(i));
+            }
+            else{
+                wordState.add('_');
+            }
+
+        }
+        //Print the word State
+        for (int i = 0; i < word.length(); i++) {
+            System.out.print(wordState.get(i) + " ");
+
+        }
+        System.out.println();
+        return wordState;
+    }
+    public static void getGameState(ArrayList<Character> wordState, int wrongGuesses) {
+
+        System.out.println(Main.getHangMAn(wrongGuesses));
+
+        for (int i = 0; i < wordState.size(); i++) {
+            System.out.print(wordState.get(i) + " ");
+        }
+        System.out.println();
+
+    }
+
+
+    public static boolean checkGuess(char guess, String word, ArrayList<Character> wordState){
+
+        boolean guessed = false;
+
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) == guess) {
+                wordState.set(i, guess);
+                guessed = true;
+            }
+
+        }
+        return guessed;
+
+    }
+    public static void gamePlay(String word){
+
+        int wrongGuesses = 0;
+        boolean goodGuess = false;
+        String missedGuesses = "";
+
+        Scanner sc = new Scanner(System.in);
+
+        //get the initial game state
+        System.out.println(Main.getHangMAn(wrongGuesses));
+        ArrayList<Character> wordState = getInitialWordState(word);
+
+        while(wrongGuesses <=9){
+
+            //Get the guesses
+            System.out.printf("Make a guess: You have %d guesses\n", 9-wrongGuesses);
+            System.out.println("Missed guesses: " + missedGuesses );
+            char guess = sc.next().charAt(0);
+            //System.out.println("Guess: " + guess);
+            goodGuess  = checkGuess(guess,word,wordState);
+
+            if (goodGuess){
+                System.out.println("You have guessed correctly!");
+                getGameState(wordState,wrongGuesses);
+
+                if(!wordState.contains('_')){
+                    getGameState(wordState,wrongGuesses);
+                    System.out.println("You Won!!");
+                    break;
+                }
+
+            }
+            else{
+                System.out.println("You have guessed incorrectly!");
+                wrongGuesses++;
+                getGameState(wordState,wrongGuesses);
+                missedGuesses += guess + " ";
+
+            }
+
+        }//end while
+
+        if(wrongGuesses >= 9){
+            getGameState(wordState,wrongGuesses);
+            System.out.printf("Sorry, the word was %s.", word);
+        }
+
+
+    }//end gamePlay
+
+}//end class
