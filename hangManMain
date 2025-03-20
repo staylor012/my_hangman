@@ -1,0 +1,42 @@
+import java.util.Scanner;
+import java.util.Random;
+public class HangMan {
+
+    public static void main(String[] args) {
+        int loop = 0;
+        do {
+            String[] animal = {"puppy", "dog", "kitten", "owl", "fox"};
+            String [] sense = {"touch", "smell", "taste", "feel", "hear"};
+            String [] city = {"Memphis", "San Diego", "San Francisco", "San Jose", "Dallas"};
+            String [] car = {"Porsche", "BMW", "Honda", "Toyota", "Mercedes"};
+            String [] country = {"United Kingdom", "United States", "South Africa", "France", "Germany"};
+            Categories animals = new Categories(animal);
+            Categories senses = new Categories(sense);
+            Categories cities = new Categories(city);
+            Categories cars = new Categories(car);
+            Categories countries = new Categories(country);
+            Categories [] subjects = {animals, senses, cities, cars, countries};
+            Random rdm = new Random();
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter difficulty level: 5 for easy and 10 for hard");
+            int difficulty = sc.nextInt();
+            int index = 0;
+            if (difficulty == 5) {
+                System.out.println("What subject would you like to pick? Enter 0 for animals, 1 for senses, 2 for cities, 3 for cars, and 4 for countries");
+                index = sc.nextInt();
+                Categories domain = subjects[index];
+                String key = domain.getRandomItem();
+                System.out.println(key);
+            } else if (difficulty == 10) {
+                Categories domain = subjects[rdm.nextInt(5)];
+                String key = domain.getRandomItem();
+                System.out.println(key);
+
+            }
+            System.out.println("Would you like to play again? Enter Y for yes and N for no");
+            if (!sc.next().equalsIgnoreCase("y")) {
+                loop =1;
+            }
+        }while (loop == 0);
+    }
+}
