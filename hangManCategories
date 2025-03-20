@@ -1,0 +1,15 @@
+import java.util.Random;
+
+public class Categories {
+    String [] items = new String[5];
+    Categories(String [] a){
+        for (int i = 0; i < a.length; i++){
+            this.items[i] = a[i];
+        }
+    }
+
+    public String getRandomItem(){
+        Random rand = new Random();
+        return items[rand.nextInt(items.length)];
+    }
+}
